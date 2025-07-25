@@ -1,9 +1,9 @@
 import { useRef } from "react";
 import Classes from "./NewTodo.module.css";
-type NewTodoProps = {
-  onAddTodo: (text: string) => void;
-};
-const NewTodo = ({ onAddTodo }: NewTodoProps) => {
+import { useTodosContext } from "../store/todos-context-store";
+
+const NewTodo = () => {
+  const { addTodo } = useTodosContext();
   const inputRef = useRef<HTMLInputElement>(null);
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
@@ -11,7 +11,8 @@ const NewTodo = ({ onAddTodo }: NewTodoProps) => {
     if (enteredText.trim().length === 0) {
       return; // Prevent adding empty todos
     }
-    onAddTodo(enteredText); // Here you would typically dispatch an action or call a function to add the todo
+    addTodo(enteredText);
+    inputRef.current!.value = ""; // Clear the input after adding
   };
   return (
     <form onSubmit={submitHandler} className={Classes.form}>
